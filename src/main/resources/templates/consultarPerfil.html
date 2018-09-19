@@ -1,0 +1,206 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<title>Jesmon Seguridad</title>
+<link rel="icon" href="../img/logo_small.png"/>
+<div th:replace="fragments/header.html :: header-css" />
+
+<script type="text/javascript" src="../js/base64.js"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+	jQuery(document).ready( function() {
+		$('#cambiarPasswordForm').validate(getValidationObject(cambiarPasswordFomRules));
+
+		 $('.password').keypress(function(e) { 
+            var capaMensaje = "#mensajeBloqMayusculas";
+            if(this.id == "nuevoPassword")
+            	capaMensaje = "#mensajeBloqMayusculas2";
+            else if(this.id == "repitaNuevoPassword")
+            	capaMensaje = "#mensajeBloqMayusculas3";
+        	var code = e.keyCode || w.which;
+        	if(code > 64 && code < 97 && !e.shiftKey || void 0)
+				$(capaMensaje).show();
+        	else
+        		$(capaMensaje).hide();
+        });
+	
+	});
+
+	function FnMostrarCambiarPassword(){				
+		$('#cambiarPasswordModal').modal();
+	}
+	/*]]>*/	
+</script>
+
+
+</head>
+<body>
+	<div sec:authorize="hasRole('ROLE_CLIENTE')">
+		<div th:replace="fragments/header.html :: navegacionCliente" />
+	</div>
+	<div sec:authorize="hasRole('ROLE_TRAMITADOR')">
+		<div th:replace="fragments/header.html :: navegacionTramitador" />
+	</div> 
+
+	<br />
+	<div class="container">
+		<div th:if="${param.error != null}">
+			<div class="alert alert-danger" th:text="${(param.error + '')}"/>
+		</div>
+		<div th:if="${param.mensaje != null}">
+			<div class="alert alert-info" th:text="${(param.mensaje + '')}" />
+		</div>
+
+		<div th:if="${error != null}">
+			<div class="alert alert-danger" th:text="${(error + '')}"/>
+		</div>
+		<div th:if="${mensaje != null}">
+			<div class="alert alert-info" th:text="${(mensaje + '')}" />
+		</div>
+		
+		<div class="card">
+			<h4 class="card-header" th:inline="text">[[${session.USUAIO_SESION.nombreCompleto}]] 
+				<button type="button" class="btn btn-sm btn-primary"
+									data-toggle="modal" data-target="#cambiarPasswordModal">Cambiar contraseña</button>
+			</h4>
+			<div class="card-body" sec:authorize="hasRole('ROLE_CLIENTE')">
+			    <h5 class="card-title">Empresa</h5>
+			    <p class="card-text" th:inline="text">[[${session.USUAIO_SESION.empresa.denominacion}]]</p>
+			</div>
+			<div class="card-body">
+			    <h5 class="card-title">Sedes</h5>
+			    <table class="table table-striped">
+					<thead>
+						<tr>
+							<th>Denominación sede</th>
+							<th>Teléfono</th>
+							<th>Dirección</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="sede : ${session.USUAIO_SESION.listaSedes}">
+							<td th:text="${sede.denominacion}">Text ...</td>
+							<td th:text="${sede.telefono}">Text ...</td>
+							<td th:text="${sede.direccion != null ? sede.direccion.direccionStr : ''}">Text ...</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="row">
+			  <div class="col-sm-6">
+			    <div class="card">
+			      <div class="card-body">
+			        <h5 class="card-title">Usuario</h5>
+			        <p class="card-text" th:inline="text">[[${session.USUAIO_SESION.nif}]]</p>
+			      </div>
+			    </div>
+			  </div>
+			  <div class="col-sm-6">
+			    <div class="card">
+			      <div class="card-body">
+			        <h5 class="card-title">Email</h5>
+			        <p class="card-text" th:inline="text">[[${#strings.defaultString(session.USUAIO_SESION.email,'')}]]</p>
+			      </div>
+			    </div>
+			  </div>
+			</div>
+			<div class="row">
+			  <div class="col-sm-6">
+			    <div class="card">
+			      <div class="card-body">
+			        <h5 class="card-title">Teléfono</h5>
+			        <p class="card-text" th:inline="text">[[${#strings.defaultString(session.USUAIO_SESION.telefono,'')}]]</p>
+			      </div>
+			    </div>
+			  </div>
+			  <div class="col-sm-6" sec:authorize="hasRole('ROLE_CLIENTE')">
+			    <div class="card">
+			      <div class="card-body">
+			        <h5 class="card-title">Cargo</h5>
+			        <p class="card-text" th:inline="text">[[${session.USUAIO_SESION.cargo}]]</p>
+			      </div>
+			    </div>
+			  </div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="modal fade" id="cambiarPasswordModal" tabindex="-1" role="dialog"
+		aria-labelledby="cambiarPasswordModalLabel" aria-hidden="true">
+		<form method="post" th:action="@{/login/cambiarPasswordPerfil}"
+			id="cambiarPasswordForm" th:object="${cambiarPasswordForm}">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title text-primary" id="CambiarPasswordLabel">
+							Cambiar contraseña</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<div class="container">
+							<div class="form-group">
+								<label for="passwordActual">Contraseña actual</label>
+									<input type="password"
+										class="form-control password" id="passwordActual" th:field="*{passwordActual}" required="required"
+										aria-describedby="passwordActual" placeholder="Contraseña actual" />
+									<div class="alert alert-danger" th:if="${#fields.hasErrors('passwordActual')}" th:errors="*{passwordActual}">Error en el campo contraseña actual.</div>
+									<script th:inline="javascript" th:if="${#fields.hasErrors('passwordActual')}">
+										FnMostrarCambiarPassword();
+									</script>
+									<div class="alert alert-info" id="mensajeBloqMayusculas" style="display: none">Bloqueo mayúsculas activo</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="nuevoPassword">Nueva contraseña</label>
+								<div class="input-group mb-3">
+									<input type="password"
+										class="form-control password" id="nuevoPassword" th:field="*{nuevoPassword}" required="required"
+										aria-describedby="nuevoPasswordHelp" placeholder="Nueva contraseña" />
+									<div class="input-group-append">
+									    <span class="input-group-text" id="nuevoPasswordHelp">6 carácteres mínimo</span>
+									</div>
+									
+									<div class="alert alert-danger" th:if="${#fields.hasErrors('nuevoPassword')}" th:errors="*{nuevoPassword}">Error en el campo nueva contraseña.</div>
+									<script th:inline="javascript" th:if="${#fields.hasErrors('nuevoPassword')}">
+										FnMostrarCambiarPassword();
+									</script>
+									<div class="alert alert-info" id="mensajeBloqMayusculas2" style="display: none">Bloqueo mayúsculas activo</div> 
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="nuevoPassword">Repita nueva contraseña</label>
+								<div class="input-group mb-3">
+									<input type="password"
+										class="form-control password" id="repitaNuevoPassword" th:field="*{repitaNuevoPassword}" required="required"
+										aria-describedby="repitaNuevoPasswordHelp" placeholder="Nueva contraseña" />
+									<div class="input-group-append">
+								    <span class="input-group-text" id="repitaNuevoPasswordHelp">6 carácteres mínimo</span>								    
+								  </div>
+								  <div class="alert alert-info" id="mensajeBloqMayusculas3" style="display: none">Bloqueo mayúsculas activo</div>
+								  <div class="alert alert-danger" th:if="${#fields.hasErrors('repitaNuevoPassword')}" th:errors="*{repitaNuevoPassword}">Error en el campo repita nueva contraseña.</div>
+								  <script th:inline="javascript" th:if="${#fields.hasErrors('repitaNuevoPassword')}">
+										FnMostrarCambiarPassword();
+									</script>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary"
+							data-dismiss="modal">Cancelar</button>
+						<button type="submit" class="btn btn-primary">Cambiar contraseña</button>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+		
+
+	<div th:replace="fragments/footer.html :: footer" />
+
+</body>
+</html>

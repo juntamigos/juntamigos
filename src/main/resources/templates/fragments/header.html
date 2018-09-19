@@ -1,0 +1,125 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<div th:fragment="header-css">
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<link rel="stylesheet" type="text/css"
+		href="../webjars/bootstrap/4.0.0/css/bootstrap.min.css" />
+	<script src="../webjars/jquery/3.1.1/jquery.min.js"></script>
+
+	<script type="text/javascript"
+		src="../webjars/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+	<script type="text/javascript" src="../js/bootstrap-datepicker.min.js"></script>
+
+	<link rel="stylesheet" th:href="@{/css/main.css}"
+		href="../../../css/main.css" />
+
+	<link rel="stylesheet"
+		th:href="@{/css/bootstrap-datepicker.standalone.min.css}"
+		href="../../../css/bootstrap-datepicker.standalone.min.css" />
+	
+	<script type="text/javascript" src="../js/jquery.validate.min.js"></script>
+	<script type="text/javascript" src="../js/localization/messages_es.js"></script>
+	<script type="text/javascript" src="../js/jesmon.js"></script>
+	<script type="text/javascript" src="../js/utils.js"></script>
+</div>
+</head>
+<body>
+
+<div th:fragment="navegacionTramitador">
+		<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+			<a class="navbar-brand" href="#">Have Fun</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse"
+				data-target="#navbarColor02" aria-controls="navbarColor02"
+				aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<!--
+			    <p th:text="${session.usuarioSesion.grupo}" th:unless="${session == null}">xxx</p>
+			-->
+			<div class="collapse navbar-collapse" id="navbarColor02">
+				<ul class="navbar-nav mr-auto">
+					<li th:class="${#httpServletRequest.getRequestURI().contains('grupo')? 'nav-item active': 'nav-item'}" th:if="${session.USUAIO_SESION.grupo == null}">
+						<a class="nav-link" href="grupos">Crear Grupo</a>
+					</li>
+					<li th:class="${#httpServletRequest.getRequestURI().contains('grupo')? 'nav-item active': 'nav-item'}" th:if="${session.USUAIO_SESION.grupo != null}">
+						<a class="nav-link" href="modificarGrupo">Modificar Grupo</a>
+					</li>
+					<li th:class="${#httpServletRequest.getRequestURI().contains('mpresa')? 'nav-item active': 'nav-item'}">
+						<a class="nav-link" href="empresas">Prepara Plan</a>
+					</li>
+					<li th:class="${#httpServletRequest.getRequestURI().contains('planes')? 'nav-item active': 'nav-item'}">
+						<a class="nav-link" href="planes">Mis Planes</a>
+					</li>
+					
+					
+				</ul>
+			</div>
+		</nav>
+	</div>
+
+
+	
+
+	<div th:fragment="navegacionCliente">
+		<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+			<a class="navbar-brand" href="#">Have Fun</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse"
+				data-target="#navbarColor02" aria-controls="navbarColor02"
+				aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<div class="collapse navbar-collapse" id="navbarColor02">
+				<ul class="navbar-nav mr-auto">
+					<li th:class="${#httpServletRequest.getRequestURI().contains('ncidencia')? 'nav-item active': 'nav-item'}">
+						<a class="nav-link" href="incidencias">Mis incidencias</a>
+					</li>
+					<li th:class="${#httpServletRequest.getRequestURI().contains('Perfil')? 'nav-item active': 'nav-item'}">
+						<a class="nav-link" href="consultarPerfil">Mis datos</a>
+					</li>
+					<li th:class="${#httpServletRequest.getRequestURI().contains('contacto')? 'nav-item active': 'nav-item'}">
+						<a class="nav-link" href="contacto">Contaco</a>
+					</li>
+				</ul>
+			</div>
+		</nav>
+	</div>
+
+	<div th:fragment="navegacionAdmin">
+		<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+			<a class="navbar-brand" href="#">Have Fun</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse"
+				data-target="#navbarColor02" aria-controls="navbarColor02"
+				aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarColor02">
+				<ul class="navbar-nav mr-auto">
+					<li th:class="${#httpServletRequest.getRequestURI().contains('grupo')? 'nav-item active': 'nav-item'}">
+						<a class="nav-link" href="grupos">Crear Grupo</a>
+					</li>
+					<li th:class="${#httpServletRequest.getRequestURI().contains('mpresa')? 'nav-item active': 'nav-item'}">
+						<a class="nav-link" href="empresas">Prepara Plan</a>
+					</li>
+					<li th:class="${#httpServletRequest.getRequestURI().contains('ruleta')? 'nav-item active': 'nav-item'}">
+						<a class="nav-link" href="ruletas">Mis Planes</a>
+					</li>
+					
+					
+				</ul>
+			</div>
+		</nav>
+	</div>
+
+
+	<div th:fragment="nav-vacio">
+		<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+			<a class="navbar-brand" href="#">Have Fun</a>
+		</nav>
+	</div>
+
+
+</body>
+</html>

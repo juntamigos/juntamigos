@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<title>Jesmon Seguridad</title>
+<link rel="icon" href="../img/logo_small.png"/>
+<div th:replace="fragments/header.html :: header-css" />
+
+<script type="text/javascript" src="../js/base64.js"></script>
+<script type="text/javascript">
+
+	jQuery(document).ready( function() {
+		$('#cambiarPasswordForm').validate(getValidationObject(cambiarPasswordFomRules));
+	});
+
+	function FnMostrarCambiarPassword(){				
+		$('#cambiarPasswordModal').modal();
+	}
+	
+</script>
+
+
+</head>
+<body>
+	<div sec:authorize="hasRole('ROLE_CLIENTE')">
+		<div th:replace="fragments/header.html :: navegacionCliente" />
+	</div>
+	<div sec:authorize="hasRole('ROLE_TRAMITADOR')">
+		<div th:replace="fragments/header.html :: navegacionTramitador" />
+	</div> 
+
+	<br />
+	<div class="container">
+				
+		<div class="card">
+			<h4 class="card-header" th:inline="text">Contacto</h4>
+			<ul class="list-group list-group-flush">
+			    <li class="list-group-item"><img src="../img/TEL_ICON.png" alt="Teléfono" title="Teléfono fijo"/>  <a href="tel:91 498 72 03">91 498 72 03</a></li>
+			    <li class="list-group-item"><img src="../img/MOVIL_ICON.png" alt="Teléfono" title="Teléfono móvil"/>  <a href="tel:606 906 295">606 906 295</a> - <a href="tel:609 825 923">609 825 923</a>	</li>
+			    <li class="list-group-item"><img src="../img/HOME_ICON.png" alt="Dirección" title="Dirección"/>
+			    	C/ Camino de Polvoranca, 43 Leganés - Madrid
+				</li>
+				<li class="list-group-item"><img src="../img/icono-mail.png" alt="Mail" title="Mail" height="40px;" width="40px;"/>
+			    	<a href="mailto:aplicacion@jesmonseguridad.com">aplicacion@jesmonseguridad.com</a>: correo para incidencias informáticas
+				</li>
+				<li class="list-group-item"><img src="../img/icono-mail.png" alt="Mail" title="Mail" height="40px;" width="40px;"/>
+			    	<a href="mailto:aplicacion@jesmonseguridad.com">administracion@jesmonseguridad.com</a>: correo para gestiones administrativas
+				</li>
+				
+				<li  class="list-group-item">
+					<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12167.721034065775!2d-3.786910068704397!3d40.32170532877087!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd418a2e8edcbf31%3A0x386539cb0cba1359!2sJesmon+Seguridad!5e0!3m2!1ses!2ses!4v1521583056406" width="600" height="450" frameborder="0" style="border:0" allowfullscreen="allowfullscreen"></iframe>
+				</li>
+				
+				
+			</ul>
+		</div>
+	</div>
+	<div th:replace="fragments/footer.html :: footer" />
+
+</body>
+</html>

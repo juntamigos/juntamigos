@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <link rel="icon" href="../../../../favicon.ico" />
+
+    <title>REGISTRAR LOGIN</title>
+
+    <!-- Bootstrap core CSS -->
+     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Custom styles for this template -->
+    <link href="form-validation.css" rel="stylesheet"/>
+  </head>
+
+  <body class="bg-light">
+ 
+
+
+
+    <div class="container">
+      <div class="py-0 text-center">
+      </div>
+
+      <div class="row">
+		
+       	<form action="Registro" method="post" id="TramitadorForm">
+        <div>
+          <h2 >Alta Registro</h2>
+          
+            <div >
+              <label for="user">User </label>
+              <input type="text" class="form-control"  name="user" id="user" />
+              <div class="invalid-feedback">
+                Please enter a valid email address for shipping updates.
+              </div>
+            </div>
+            <div >
+              <label for="password">Password</label>
+              <input type="password" class="form-control"  name="password" id="password" placeholder=""  />
+              <div class="invalid-feedback">
+                Please enter your password.
+              </div>
+            </div>
+			
+			<div >
+              <label for="password">Repite Password</label>
+              <input type="password" class="form-control" name="password2" id="password2" placeholder=""  />
+              <div class="invalid-feedback">
+                Please enter your password.
+              </div>
+            </div>
+				<div>
+			 <label for="correo">Correo Electrónico </label>
+              <input type="text" class="form-control" name="email" id="email" placeholder="you@example.com" />
+              <div class="invalid-feedback">
+                Please enter a valid email address for shipping updates.
+              </div>
+			  <br />
+			  <br />
+			  <button class="btn btn-primary btn-lg btn-block" type="submit">Registrarse</button>
+            </div>
+             </div>
+          </form>
+		
+        </div>
+      </div>
+
+      <footer class="my-5 pt-5 text-muted text-center text-small">
+        <p class="mb-1">&copy; 2017-2018 Company Name</p>
+        <ul class="list-inline">
+          <li class="list-inline-item"><a href="#">Privacy</a></li>
+          <li class="list-inline-item"><a href="#">Terms</a></li>
+          <li class="list-inline-item"><a href="#">Support</a></li>
+        </ul>
+      </footer>
+
+   
+  </body>
+</html>

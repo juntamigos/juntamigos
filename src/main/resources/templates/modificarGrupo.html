@@ -1,0 +1,143 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <link rel="icon" href="../../../../favicon.ico" />
+
+    <title>REGISTRAR LOGIN</title>
+
+    <!-- Bootstrap core CSS -->
+     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Custom styles for this template -->
+    <link href="form-validation.css" rel="stylesheet"/>
+  </head>
+
+  <body class="bg-light">
+
+	
+		<div sec:authorize="hasRole('ROLE_CLIENTE')">
+		<div th:replace="fragments/header.html :: navegacionCliente" />
+	</div>
+	<div sec:authorize="hasRole('ROLE_TRAMITADOR')">
+		<div th:replace="fragments/header.html :: navegacionTramitador" />
+	</div>
+	<div sec:authorize="hasRole('ROLE_ADMIN')">
+		<div th:replace="fragments/header.html :: navegacionAdmin" />
+	</div>
+	<br />
+	
+	
+
+    <div class="container">
+      <div class="py-0 text-center">
+       
+        <h2>Modificar Grupo</h2>
+       
+      </div>
+      <div class="row">
+        <div class="col-md-12 order-md-1">
+          <form action="modificarGrupo" method="post" class="needs-validation" enctype="multipart/form-data">
+            <div class="row">
+             
+              <div class="col-md-6 mb-3">
+			   <label for="sel1">Genero:</label>
+				<select class="form-control" id="sel1" name="genero">
+			
+					<option th:selected="${session.USUAIO_SESION.grupo.genero == 1}" value="1">Masculino</option>
+					<option th:selected="${session.USUAIO_SESION.grupo.genero == 2}" value="2">Femenino</option>
+				</select>
+			  <label for="NumPersonas">Número de personas</label>
+			 
+                <input type="text" class="form-control" id="NumPersonas" name="numPersonas" placeholder=""  required="required" />
+                <div class="invalid-feedback">
+                  Número de Personas es obligatorio
+                </div>
+                <label for="EdadMáxima">Rango de Edad</label>
+                <select class="form-control" id="sel12" name="edad">
+                		<option th:selected="${session.USUAIO_SESION.grupo.edad == 1}" value="1">18-25</option>
+                		<option th:selected="${session.USUAIO_SESION.grupo.edad == 2}" value="1">25-30</option>
+                		<option th:selected="${session.USUAIO_SESION.grupo.edad == 3}" value="1">30-35</option>
+                		<option th:selected="${session.USUAIO_SESION.grupo.edad == 4}" value="1">35-40</option>			
+                		<option th:selected="${session.USUAIO_SESION.grupo.edad == 5}" value="1">40-45</option>	
+						
+        
+				</select>
+				
+			 
+    
+    
+			 <div class="row">
+					<div class="form-group col-12">
+						<label for="fichero1">Cambiar foto</label>
+						<input type="file"
+							class="form-control" id="fichero1" name="fichero1"
+							placeholder="fichero1"/>
+					</div>
+				</div>
+				
+
+
+              </div>
+			  
+			   <div class="col-md-12 mb-6">
+			    <label for="comment">Intereses:</label>
+				<textarea class="form-control" rows="5" id="comment" name="intereses" th:value="${session.USUAIO_SESION.grupo.intereses}"></textarea>
+				
+			   </div>
+			   <div class="col-md-6 mb-3">
+			  
+			 </div>
+                
+              </div>
+           
+			
+			
+          
+           
+             
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <hr class="mb-4" />
+			<div class="text-center">
+				<button class="btn btn-primary btn-lg text-center" type="submit">Crear Grupo</button>
+			</div>
+          </form>
+        </div>
+      </div>
+      <br />
+      <br />
+      <br />
+      <div  th:replace="fragments/footer.html :: footer">
+ 	      
+       </div>
+    </div>
+
+
+
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+  
+    <script src="../../../../assets/js/vendor/popper.min.js"></script>
+    <script src="../../../../dist/js/bootstrap.min.js"></script>
+    <script src="../../../../assets/js/vendor/holder.min.js"></script>
+
+  </body>
+</html>

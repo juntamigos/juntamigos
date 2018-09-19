@@ -1,0 +1,442 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<title>Jesmon Seguridad</title>
+<link rel="icon" href="../img/logo_small.png"/>
+<div th:replace="fragments/header.html :: header-css" />
+
+<script type="text/javascript" src="../js/base64.js"></script>
+<script type="text/javascript" th:inline="javascript">
+
+	jQuery(document).ready( function() {
+		jQuery(".fecha").datepicker({changeYear:true});
+
+		jQuery("#botonConsultarSede").bind('click', function() {
+			var idIncidencia = [[${incidencia.idIncidencia}]];
+			alert(idIncidencia);
+		});
+
+		$('#formEstado').validate(getValidationObject(estadoFormRules));
+		$('#formMensaje').validate(getValidationObject(mensajeFormRules));
+		
+		jQuery("td.observacionesEstado").each(
+			function(){
+				var html = this.innerHTML;
+				if(html.endsWith("...")){
+					html = '<a id="' + this.id + '" href="#" onclick="FnMostrarObservacionesEstado(this)">' + html + '</a>';
+					this.innerHTML = html;
+				}
+			}
+		);
+
+		jQuery("td.textoMensaje").each(
+				function(){
+					var html = this.innerHTML;
+					if(html.endsWith("...")){
+						html = '<a id="' + this.id + '" href="#" onclick="FnMostrarTextoMensaje(this)">' + html + '</a>';
+						this.innerHTML = html;
+					}
+				}
+			);
+		
+	});
+
+	function FnMostrarObservacionesEstado(campo){
+		//alert(decode64(campo.id));
+		$('#labelAlert').html('Observaciones estado');
+		$('#textoAlert').val(decode64(campo.id));
+		$('#alertModal').modal();
+	}
+
+	function FnMostrarTextoMensaje(campo){
+		//alert(decode64(campo.id));
+		$('#labelAlert').html('Texto mensaje');
+		$('#textoAlert').val(decode64(campo.id));
+		$('#alertModal').modal();
+	}
+	
+	function FnCambiarEstado(estado){
+		
+		var idEstado;
+
+		if(estado == 'Reabrir')
+			idEstado = 1;
+		else if(estado == 'Tramitar')
+			idEstado = 2;
+		if(estado == 'Resolver')
+			idEstado = 3;
+		else if(estado == 'Cancelar')
+			idEstado = 4;
+		jQuery("#idEstado").val(idEstado);
+
+		estado = estado + ' incidencia';
+		$('#labelEstado').html(estado);
+		$('#botonEstado').html(estado);
+		
+		$('#estadoModal').modal();
+	}
+
+	function FnNuevoMensaje(){
+		$('#mensajeModal').modal();
+	}
+
+	
+</script>
+
+
+</head>
+<body>
+	<div sec:authorize="hasRole('ROLE_CLIENTE')">
+		<div th:replace="fragments/header.html :: navegacionCliente" />
+	</div>
+	<div sec:authorize="hasRole('ROLE_TRAMITADOR')">
+		<div th:replace="fragments/header.html :: navegacionTramitador" />
+	</div>
+	
+	<br />
+		<div class="container">
+			<div th:if="${param.mensaje != null}">
+				<div class="alert alert-info" th:text="${(param.mensaje + '')}" />
+			</div>
+			
+			<div th:if="${mensaje != null}">
+				<div class="alert alert-info" th:text="${(mensaje)}" />
+			</div>
+
+			<div class="card">
+				<div class="card-header">
+					<h3 class="card-title text-primary" th:text="'Incidencia ' +  ${incidencia.idIncidencia} +  ' - ' + ${incidencia.asunto}"></h3>
+				</div>
+				<ul class="list-group list-group-flush">
+					<li class="list-group-item">
+						<div class="card-body">
+							<h5 class="card-title">Descripción</h5>
+							<p class="card-text" th:text="${incidencia.texto}"></p>
+						</div>
+						<div class="row">
+						  <div class="col-sm-6">
+						    <div class="card">
+						      <div class="card-body">
+						        <h5 class="card-title">Fecha alta</h5>
+						        <p class="card-text" th:text="${#dates.format(incidencia.fechaAlta, 'dd/MM/yyyy HH:mm:ss')}"></p>
+						      </div>
+						    </div>
+						  </div>
+						  <div class="col-sm-6">
+						    <div class="card">
+						      <div class="card-body">
+						        <h5 class="card-title">Estado actual</h5>
+						        <p class="card-text" th:text="${incidencia.estadoActual.descripcion}"></p>
+						      </div>
+						    </div>
+						  </div>
+						</div>
+						<div class="row">
+						  <div class="col-sm-6">
+						    <div class="card">
+						      <div class="card-body">
+						        <h5 class="card-title">Tipo incidencia</h5>
+						        <p class="card-text" th:text="${incidencia.tipoIncidencia == null ? '' : incidencia.tipoIncidencia.denominacion}"></p>
+						      </div>
+						    </div>
+						  </div>
+						  <div class="col-sm-6">
+						    <div class="card">
+						      <div class="card-body">
+						        <h5 class="card-title">Prioridad</h5>
+						        <p class="card-text" th:text="${incidencia.prioridadIncidencia == null ? '' : incidencia.prioridadIncidencia.denominacion}"></p>
+						      </div>
+						    </div>
+						  </div>
+						</div>
+						<div class="row">
+						  <div class="col-sm-6">
+						    <div class="card">
+						      <div class="card-body">
+						        <h5 class="card-title">Sede</h5>
+						        <p class="card-text" th:text="${incidencia.sede.denominacion}"></p>
+						        <h5 class="card-title">Dirección</h5>
+						        <p class="card-text" th:text="${incidencia.sede.direccion.direccionStr}"></p>
+						      </div>
+						    </div>
+						  </div>
+						  <div class="col-sm-6">
+						    <div class="card">
+						      <div class="card-body">
+						        <h5 class="card-title">Empresa</h5>
+						        <p class="card-text" th:text="${incidencia.sede.empresa.denominacion}"></p>
+						      </div>
+						    </div>
+						  </div>
+						</div>
+					</li>
+					<li class="list-group-item">
+						<div class="card-body">
+							<h5 class="card-title">Estados
+								  <input sec:authorize="hasRole('ROLE_CLIENTE')" type="button" class="btn btn-danger" th:if="${incidencia.estadoActual.idEstado == 1 || incidencia.estadoActual.idEstado == 2}"
+									value="Cancelar Incidencia"
+									onclick="FnCambiarEstado('Cancelar')" />
+								<input sec:authorize="hasRole('ROLE_CLIENTE')" type="button" class="btn btn-success" th:if="${incidencia.estadoActual.idEstado == 3 || incidencia.estadoActual.idEstado == 4}"
+									value="Reabrir Incidencia"
+									onclick="FnCambiarEstado('Reabrir')" />
+								 <input sec:authorize="hasRole('ROLE_TRAMITADOR')" type="button" class="btn btn-info" th:if="${incidencia.estadoActual.idEstado == 1}"
+									value="Tramitar Incidencia"
+									onclick="FnCambiarEstado('Tramitar')" />
+								<input sec:authorize="hasRole('ROLE_TRAMITADOR')" type="button" class="btn btn-success" th:if="${incidencia.estadoActual.idEstado == 2}"
+									value="Resolver Incidencia"
+									onclick="FnCambiarEstado('Resolver')" />
+							</h5>
+							<table class="table table-striped">
+								<thead>
+									<tr>
+										<th>Fecha</th>
+										<th>Usuario Alta</th>
+										<th>Estado</th>
+										<th>Observaciones</th>
+										<th>Ficheros</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="estado : ${incidencia.listaEstados}">
+										<td th:text="${#dates.format(estado.fechaEstado, 'dd/MM/yyyy HH:mm:ss')}"></td>
+										<td th:text="${estado.nombreUsrAlta}">Text ...</td>
+										<td th:text="${estado.estado.descripcion}">Text ...</td>
+										<td th:text="${estado.observacionesCorto}" class="observacionesEstado"
+											th:id="${estado.observacionesB64}">Text ...</td>
+										<td>
+											<ul>
+												<li th:each="fichero : ${estado.ficheros}">
+													<a th:text="${fichero.nombreFichero}" th:href="@{'consultarFichero?idFichero=' + ${fichero.idFicheroB64}}" ></a>
+												</li>
+											</ul>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</li>
+					<li class="list-group-item">
+						<div class="card-body">
+							<h5 class="card-title">Mensajes
+								<input type="button" class="btn btn-success" th:if="${incidencia.estadoActual.idEstado == 1 || incidencia.estadoActual.idEstado == 2}"
+									value="Nuevo"
+									onclick="FnNuevoMensaje()" /></h5>
+							<table class="table table-striped">
+								<thead>
+									<tr>
+										<th>Fecha</th>
+										<th>Usuario Alta</th>
+										<th>Texto</th>
+										<th>Ficheros</th>
+										<th sec:authorize="hasRole('ROLE_TRAMITADOR')">Interno</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="mensaje : ${incidencia.listaMensajes}" th:if="${mensaje.lgInterno == null || mensaje.lgInterno == 0 || session.USUAIO_SESION.esTramitador}">
+										<td th:text="${#dates.format(mensaje.fecha, 'dd/MM/yyyy HH:mm:ss')}"></td>
+										<td th:text="${mensaje.nombreUsuAlta}">Text ...</td>
+										<td th:text="${mensaje.textoCorto}" class="textoMensaje"
+											th:id="${mensaje.textoB64}">Text ...</td>
+										<td>
+											<ul>
+												<li th:each="fichero : ${mensaje.ficheros}">
+													<a th:text="${fichero.nombreFichero}" th:href="@{'consultarFichero?idFichero=' + ${fichero.idFicheroB64}}" ></a>
+												</li>
+											</ul>
+										</td>
+										<td sec:authorize="hasRole('ROLE_TRAMITADOR')" th:test="${fichero.lgInternoStr}">Interno</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+		
+		<div class="modal fade" id="estadoModal" tabindex="-1" role="dialog"
+			aria-labelledby="estadoModalLabel" aria-hidden="true" >
+			<form method="post" th:action="@{cambiarEstadoIncidencia}" id="formEstado" enctype="multipart/form-data">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title text-primary" id="labelEstado">Tramitar incidencia</h5>
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<div class="container">
+								<div class="row">
+									<div class="form-group col-12">
+										<label for="observaciones">Observaciones</label>
+										<textarea
+											class="form-control" id="observaciones" name="observaciones"
+											placeholder="Observaciones"></textarea>
+									</div>
+								</div>
+								<div class="row">
+									<div class="form-group col-12">
+										<label for="fichero1Estado">Fichero 1</label>
+										<input type="file"
+											class="form-control" id="fichero1Estado" name="fichero1"
+											placeholder="fichero1"/>
+									</div>
+								</div>
+								<div class="row">
+									<div class="form-group col-12">
+										<label for="fichero2Estado">Fichero 2</label>
+										<input type="file"
+											class="form-control" id="fichero2Estado" name="fichero2"
+											placeholder="fichero2"/>
+									</div>
+								</div>
+								<div class="row">
+									<div class="form-group col-12">
+										<label for="fichero3">Fichero 3</label>
+										<input type="file"
+											class="form-control" id="fichero3Estado" name="fichero3"
+											placeholder="fichero3Estado"/>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-12">
+										<div class="form-group">
+											<input class="form-check-input" type="checkbox" id="lgEmailAviso" name="lgEmailAviso" checked="checked" value="1"/>
+									        <label class="form-check-label" for="lgEmailAviso">
+									        Enviar email de aviso
+									        </label>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary"
+								data-dismiss="modal">Cancelar</button>
+							<button type="submit" class="btn btn-primary" id="botonEstado">Tramitar</button>
+						</div>
+					</div>
+				</div>
+				<input type="hidden" name="idIncidenciaB64" id="idIncidenciaEstado" th:value="${incidencia.idIncidenciaB64}" />
+				<input type="hidden" name="idEstado" id="idEstado" />
+			</form>
+	</div>
+	
+	<div class="modal fade" id="mensajeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<form method="post" th:action="@{insertarMensaje}" id="formMensaje" enctype="multipart/form-data">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title text-primary" id="labelMensaje">Nuevo mensaje</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<div class="container">
+							 <div class="row">
+	  								<div class="col-12">
+									<div class="form-group">
+										<label for="texto">Mensaje</label>
+										<textarea
+											class="form-control" id="texto" name="texto"
+											placeholder="Mensaje" required="required"></textarea>
+									</div>
+								</div>
+							</div>
+							<div class="row" sec:authorize="hasRole('ROLE_TRAMITADOR')">
+	  								<div class="col-12">
+									<div class="form-group">
+										 <input class="form-check-input" type="checkbox" id="lgInterno" name="lgInterno" value="1"/>
+								        <label class="form-check-label" for="lgInterno">
+								         Mensaje interno
+								        </label>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="form-group col-12">
+									<label for="fichero1Mensaje">Fichero 1</label>
+									<input type="file"
+										class="form-control" id="fichero1Mensaje" name="fichero1"
+										placeholder="fichero1"/>
+								</div>
+							</div>
+							<div class="row">
+								<div class="form-group col-12">
+									<label for="fichero2Mensaje">Fichero 2</label>
+									<input type="file"
+										class="form-control" id="fichero2Mensaje" name="fichero2"
+										placeholder="fichero2"/>
+								</div>
+							</div>
+							<div class="row">
+								<div class="form-group col-12">
+									<label for="fichero3Mensaje">Fichero 3</label>
+									<input type="file"
+										class="form-control" id="fichero3Mensaje" name="fichero3"
+										placeholder="fichero3"/>
+								</div>
+							</div>
+							<div class="row">
+	  								<div class="col-12">
+									<div class="form-group">
+										<input class="form-check-input" type="checkbox" id="lgEnviarCorreo" name="lgEnviarCorreo" checked="checked" value="1"/>
+								        <label class="form-check-label" for="lgEnviarCorreo">
+											Enviar email de aviso
+								        </label>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary"
+							data-dismiss="modal">Cancelar</button>
+						<button type="submit" class="btn btn-primary" id="botonEstado">Confirmar</button>
+					</div>
+				</div>
+			</div>
+			<input type="hidden" name="idIncidenciaB64" id="idIncidenciaMensaje" th:value="${incidencia.idIncidenciaB64}" />
+		</form>
+	</div>
+
+	<div class="modal fade" id="alertModal" tabindex="-1" role="dialog"
+			aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title text-primary" id="labelAlert">Observaciones</h5>
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<div class="container">
+								 <div class="row">
+    								<div class="col-12">
+										<div class="form-group">
+											<textarea disabled="disabled"
+												class="form-control" id="textoAlert" name="textoAlert"></textarea>
+										</div>
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary"
+								data-dismiss="modal">Aceptar</button>
+						</div>
+					</div>
+				</div>
+		</div>
+	</div>	
+
+	<div th:replace="fragments/footer.html :: footer" />
+
+</body>
+</html>

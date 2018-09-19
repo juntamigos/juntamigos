@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<title>Jesmon Seguridad</title>
+<meta charset="UTF-8" />
+
+<div th:replace="/fragments/header.html :: header-css" />
+
+</head>
+<body>
+
+	<div th:replace="/fragments/header.html :: nav-vacio" />
+	<br />
+	<div class="container">
+        <h1>403 - Accesso denegado</h1>
+        <div th:inline="text">Hello '[[${#httpServletRequest.remoteUser}]]',
+                no tienes permisos para acceder a esta página.<br/>
+        	Pusla <a href="../tramitador/incidencias" sec:authorize="hasRole('ROLE_TRAMITADOR')">aquí</a><a href="../cliente/incidencias" sec:authorize="hasRole('ROLE_CLIENTE')">aquí</a> para acceder a la gestión de tus incidencias.        
+        </div>
+    </div>
+	
+	<div th:replace="/fragments/footer.html :: footer" />
+
+</body>
+</html>

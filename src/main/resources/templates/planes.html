@@ -1,0 +1,141 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+  <head>
+     <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <link rel="icon" href="../../../../favicon.ico" />
+
+    <title>Prepara Plan</title>
+
+    <!-- Bootstrap core CSS -->
+     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Custom styles for this template -->
+    <link href="form-validation.css" rel="stylesheet"/>
+ 
+  </head>
+
+ <body class="bg-light">
+
+	
+		<div sec:authorize="hasRole('ROLE_CLIENTE')">
+		<div th:replace="fragments/header.html :: navegacionCliente" />
+	</div>
+	<div sec:authorize="hasRole('ROLE_TRAMITADOR')">
+		<div th:replace="fragments/header.html :: navegacionTramitador" />
+	</div>
+	<div sec:authorize="hasRole('ROLE_ADMIN')">
+		<div th:replace="fragments/header.html :: navegacionAdmin" />
+	</div>
+	<br />
+	
+	
+
+    <div class="container">
+     
+       
+        <h2>Planes Pendientes</h2>
+       
+     
+
+      <div class="row">
+       
+        <div class="col-md-3 order-md-1">
+       
+		
+
+		
+   <div class="col-md-3 order-md-1">
+   			
+<div th:each="citaPendiente : ${citasPendientes}">
+
+
+<div class="card" style="width:20rem;margin:20px 0 24px 0">
+  <img class="card-img-top" th:src="@{'VisualizarImagen?idGrupo=' + 21}" alt="image" style="width:100%"> </img>
+  <div class="card-body">
+    <h4 class="card-title"></h4>
+     
+      <p class="card-text">Edad </p><div th:text="${citaPendiente.grupoa.edad}"></div>
+     
+ 
+ 
+    <a href="javascript:void(0)" class="btn btn-primary">Ver Detalle</a>
+    
+    <a th:href="@{'Actualizarcita?idCita=' + ${citaPendiente.id_cita}}" class="btn btn-primary">AceptarPlan</a>
+  </div>
+</div>
+
+   	
+</div> 
+
+</div> 
+
+<h2>Planes aprobados</h2>
+   <div class="col-md-3 order-md-1">			
+<div th:each="citaAprobada :  ${citasAprobadas}">
+
+<div class="card" style="width:20rem;margin:20px 0 24px 0">
+  <img class="card-img-top" src="imagen.jpg" alt="image" style="width:100%"> </img>
+  <div class="card-body">
+    <h4 class="card-title"></h4>
+    <p class="card-text"> <td th:text="${citaAprobada.grupoa.edad}">Edad</td></p>
+    <a href="javascript:void(0)" class="btn btn-primary">Ver Detalle</a>
+  </div>
+</div>
+
+   	
+</div> 
+
+</div> 
+
+
+<h2>Planes Solicitados</h2>
+   <div class="col-md-3 order-md-1">			
+<div th:each="citaSolicitada : ${citasSolicitadas}">
+
+<div class="card" style="width:20rem;margin:20px 0 24px 0">
+  <img class="card-img-top" src="imagen.jpg" alt="image" style="width:100%"> </img>
+  <div class="card-body">
+    <h4 class="card-title"></h4>
+    <p class="card-text"> <td th:text="${citaSolicitada.grupob.edad}">Edad</td></p>
+    <a href="javascript:void(0)" class="btn btn-primary">Ver Detalle</a>
+  </div>
+</div>
+
+   	
+</div> 
+
+</div> 
+
+
+
+   
+      <br />
+      <br />
+      <br />
+      <div  th:replace="fragments/footer.html :: footer">
+ 	      
+       </div>
+   
+   
+   
+    </div>
+    
+       </div>
+       </div>
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+  
+    <script src="../../../../assets/js/vendor/popper.min.js"></script>
+    <script src="../../../../dist/js/bootstrap.min.js"></script>
+    <script src="../../../../assets/js/vendor/holder.min.js"></script>
+
+  </body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Jesmon Seguridad</title>
+<meta charset="UTF-8" />
+
+<div th:replace="fragments/header.html :: header-css" />
+
+</head>
+<body>
+
+	<div th:replace="fragments/header.html :: nav-vacio" />
+	<br />
+	<div class="container">
+		<div class="alert alert-danger" th:inline="text">Error en la aplicación. Fecha del error: [[${#dates.format(#dates.createNow(), 'dd/MM/yyyy HH:mm:ss')}]]</div>
+		<br />
+		<button type="button" class="btn btn-primary" onclick="history.go(-1)">Volver</button>
+	</div>
+	
+	
+	<div th:replace="fragments/footer.html :: footer" />
+
+</body>
+</html>

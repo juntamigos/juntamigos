@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<title>Jesmon Seguridad</title>
+<meta charset="UTF-8" />
+
+<link rel="icon" href="../img/logo_small.png"/>
+
+<div th:replace="fragments/header.html :: header-css" />
+
+<script type="text/javascript">
+/*<![CDATA[*/
+	jQuery(document).ready( function() {
+
+        $('#password').keypress(function(e) {
+        	var code = e.keyCode || w.which;
+        	if(code > 64 && code < 97 && !e.shiftKey || void 0)
+				$("#mensajeBloqMayusculas").show();
+        	else
+        		$("#mensajeBloqMayusculas").hide();
+        });
+        /*
+		$("#formCambioPassword").validate({
+		  rules: {
+		    email: {
+		      required: true,
+		      email: true
+		    },
+			repeatEmail: {
+	      		equalTo: "#email"
+		     }
+		  }
+		});
+		$("#formLogin").validate({
+			rules: {
+				username: {
+					required: true
+   				},
+   				password: {
+   					required: true
+    			}
+    		}
+		});
+		*/
+		$('#formLogin').validate(getValidationObject(loginFormRules));
+		$('#formCambioPassword').validate(getValidationObject(solicitarCambioPasswordFormRules));
+	});
+	/*]]>*/
+</script>
+</head>
+<body>
+
+	<div th:replace="fragments/header.html :: nav-vacio" />
+	<br />
+	<div class="container">
+
+		<div class="row" style="margin-top: 20px">
+			<div
+				class="col-xs-12 col-sm-10 col-md-8">
+				<form th:action="@{/login/login}" method="post" id="formLogin">
+					<fieldset>
+						<h1 class="text-primary">Iniciar sesión en Have Fun</h1>
+					
+						<div th:if="${param.error}">
+							<div class="alert alert-danger">Invalido usuario o contraseña.</div>
+						</div>
+						<div th:if="${param.logout}">
+							<div class="alert alert-info">Sesión cerrada de forma correcta.</div>
+						</div>
+						<div th:if="${param.mensaje != null}">
+							<div class="alert alert-info" th:text="${(param.mensaje + '')}" />
+						</div>
+
+						<div th:if="${param.errorLogin != null}">
+							<div class="alert alert-danger"
+								th:text="${(param.errorLogin + '')}" />
+						</div>
+						<br> </br>
+						<div class="form-group row w-50">
+							<label for="username" class="col-md-3 col_form-label">Usuario</label>
+							<div class="col-md-9">
+								<input type="text" name="username" id="username"
+									class="form-control input-lg" placeholder="Usuario"
+									required="true" autofocus="true" />
+							</div>
+						</div>
+						<div class="form-group row w-50">
+							<label for="password" class="col-md-3 col_form-label">Contraseña</label>
+							<div class="col-md-9">
+								<input type="password" name="password" id="password"
+									class="form-control input-lg" placeholder="Contraseña"
+									required="true" />
+								<div class="alert alert-info" id="mensajeBloqMayusculas" style="display: none">Bloqueo mayúsculas activo</div>
+							</div>
+						</div>
+				
+						<div class="row">
+							<div class="col-md-12 col-lg-4 mb-2">
+								<input type="submit" class="btn btn-lg btn-primary "
+									value="Acceder" />
+							</div>
+							<div class="col-md-12 col-lg-8 mb-2">
+								<button type="button" class="btn btn-lg btn-secondary"
+									data-toggle="modal" data-target="#exampleModal">¿Ha
+									olvidado su contraseña?</button>
+							</div>
+						</div>
+						<br> </br>
+						<div class="row">
+							<div class="col-12">
+							
+								<H1> O date de alta...</H1>
+		   						<a href="registro">Registrarse</a>
+							</div>
+						</div>
+					</fieldset>
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<form method="post" th:action="@{/login/solicitarCambioPassword}"
+			id="formCambioPassword">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title text-primary" id="exampleModalLabel">Solicitar
+							cambio de contraseña</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+
+					<div class="modal-body">
+						<div class="container">
+							<div class="form-group">
+								<label for="email">Email</label> <input type="text" required="required"
+									class="form-control" id="email" name="email"
+									aria-describedby="emailHelp" placeholder="Email" />
+							</div>
+							<div class="form-group">
+								<label for="repeatEmail">Repita email</label> <input type="text" required="required"
+									class="form-control" id="repeatEmail" name="repeatEmail"
+									aria-describedby="emailHelp" placeholder="Repita email" />
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary"
+							data-dismiss="modal">Cancelar</button>
+						<button type="submit" class="btn btn-primary">Solicitar
+							cambio</button>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+    
+	<div th:replace="fragments/footer.html :: footer" />
+
+</body>
+</html>

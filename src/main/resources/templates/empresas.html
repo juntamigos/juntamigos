@@ -1,0 +1,150 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<title>Prepara Plan</title>
+<link rel="icon" href="../img/logo_small.png"/>
+<div th:replace="fragments/header.html :: header-css" />
+
+<script type="text/javascript" src="../js/base64.js"></script>
+<script type="text/javascript" th:inline="javascript">
+
+	
+
+
+	
+</script>
+
+
+</head>
+
+ <body class="bg-light">
+
+	
+		<div sec:authorize="hasRole('ROLE_CLIENTE')">
+		<div th:replace="fragments/header.html :: navegacionCliente" />
+	</div>
+	<div sec:authorize="hasRole('ROLE_TRAMITADOR')">
+		<div th:replace="fragments/header.html :: navegacionTramitador" />
+	</div>
+	<div sec:authorize="hasRole('ROLE_ADMIN')">
+		<div th:replace="fragments/header.html :: navegacionAdmin" />
+	</div>
+	<br />
+	
+	
+
+    <div class="container">
+      <div class="py-0 text-center">
+       
+        <h2>Prepara tu plan</h2>
+       
+      </div>
+
+      <div class="row">
+       
+        <div class="col-md-3 order-md-1">
+       
+		
+
+		
+   <div class="col-md-3 order-md-1">			
+<div th:each="grupo : ${grupos}">
+
+<div class="card" style="width:20rem;margin:20px 0 24px 0">
+  <img class="card-img-top" src="imagen.jpg" alt="image" style="width:100%"> </img>
+  
+  
+  
+  
+  
+  
+  <div class="card-body">
+    <h4 class="card-title"></h4>
+    <p class="card-text">Edad </p><div th:text="${grupo.edad}"></div>
+   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+    Ver Detalle
+  </button>
+    
+  
+  
+  <div class="modal fade" id="myModal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Detalle Grupo</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+        
+        
+			<div class="container">
+				<div class="row">
+					<label for="EdadMáxima">Rango de Edad</label>
+	              	<select class="form-control" id="sel12" name="edad">
+						<option th:selected="${session.USUAIO_SESION.grupo.edad == 1}" >18-25</option>
+						<option th:selected="${session.USUAIO_SESION.grupo.edad == 2}">25-30</option>
+						<option th:selected="${session.USUAIO_SESION.grupo.edad == 3}">30-35</option>
+						<option th:selected="${session.USUAIO_SESION.grupo.edad == 4}">35-40</option>
+						<option th:selected="${session.USUAIO_SESION.grupo.edad == 5}">40-50</option>
+					</select>
+				</div>
+					<div class="col-md-12 mb-6 row">
+				    <label for="comment">Intereses:</label>
+					<textarea class="form-control" rows="5" id="comment" name="intereses" th:inline="text">[[${session.USUAIO_SESION.grupo.intereses}]]</textarea>
+				</div>
+			</div>
+       	</div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+    
+    
+    
+    <a th:href="@{'insertarcita?grupoA=' + ${grupo.idGrupo} + '&amp;grupoB=' + ${session.USUAIO_SESION.grupo.idGrupo}}" class="btn btn-primary">Solicitar Cita</a>
+    
+      
+  </div>
+</div>
+
+   	
+</div> 
+
+</div> 
+
+   
+      <br />
+      <br />
+      <br />
+      <div  th:replace="fragments/footer.html :: footer">
+ 	      
+       </div>
+   
+   
+   
+    </div>
+    
+       </div>
+       </div>
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+  
+    <script src="../../../../assets/js/vendor/popper.min.js"></script>
+    <script src="../../../../dist/js/bootstrap.min.js"></script>
+    <script src="../../../../assets/js/vendor/holder.min.js"></script>
+
+  </body>
+</html>

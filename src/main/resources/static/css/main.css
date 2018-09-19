@@ -1,0 +1,22 @@
+h1{
+	color:#0000FF;
+}
+
+h2{
+	color:#FF0000;
+}
+
+footer{
+    margin-top:60px;
+}
+
+.bd-example-row .row>.col, .bd-example-row .row>[class^=col-], .bd-example-row .form-group  {
+    padding-top: .50rem;
+    padding-bottom: .50rem;
+    background-color: rgba(86,61,124,.15);
+    border: 1px solid rgba(86,61,124,.2);
+}
+
+.fecha{
+	width: 110px;
+}
